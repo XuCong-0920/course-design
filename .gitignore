@@ -1,0 +1,40 @@
+# ---- Android / Gradle ----
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# ---- 构建产物 ----
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+build/
+/app/build/
+/companion/build/
+
+# ---- 签名与密钥（绝不入库）----
+*.jks
+*.keystore
+keystore.properties
+
+# ---- 日志 / 临时文件 ----
+*.log
+*.hprof
+*.tmp
+*.bak
+~$*
+
+# ---- 依赖锁（按需保留，课程项目不提交）----
+# gradle.lockfile
+
+# ---- 编辑器 ----
+.vscode/
+*.swp
