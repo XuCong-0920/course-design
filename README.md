@@ -45,12 +45,57 @@
 
 ```
 course-design/
-├─ app/                 # 主 App（2 学分）
-├─ companion/           # 伴生模块（1 学分）
-├─ docs/                # 需求、技术方案、测试记录、答辩材料
+├─ app/                          # 主 App（2 学分）
+│  ├─ build.gradle.kts           # applicationId com.xucong.wordmemory
+│  └─ src/main/
+│     ├─ java/com/xucong/wordmemory/
+│     │  ├─ MainActivity.kt              # 唯一 Activity：NavHost + BottomNav
+│     │  └─ ui/
+│     │     ├─ common/BasePlaceholderFragment.kt
+│     │     ├─ home/HomeFragment.kt      # 今日
+│     │     ├─ review/ReviewFragment.kt  # 复习
+│     │     ├─ stats/StatsFragment.kt    # 统计
+│     │     └─ mine/MineFragment.kt      # 我的（含伴生模块连通性验证）
+│     └─ res/
+│        ├─ layout/activity_main.xml、fragment_placeholder.xml
+│        ├─ navigation/nav_main.xml      # 4 个目的地
+│        ├─ menu/menu_bottom_nav.xml     # 底部导航，item id 与目的地 id 一致
+│        └─ values/strings.xml、themes.xml
+├─ companion/                    # 伴生模块（1 学分，Android Library）
+│  └─ src/main/java/com/xucong/wordmemory/companion/CompanionBridge.kt
+├─ gradle/wrapper/               # Gradle 9.6.0 wrapper
+├─ docs/                         # 需求、技术方案、测试记录、答辩材料
 ├─ README.md
-└─ .gitignore
+├─ .gitignore
+└─ .gitattributes
 ```
+
+## 构建与运行
+
+环境基线：
+
+| 项 | 版本 |
+| --- | --- |
+| AGP | 9.4.0 |
+| Gradle | 9.6.0（wrapper 已提交，无需本机装 Gradle） |
+| compileSdk / targetSdk | 37 |
+| minSdk | 24 |
+| JDK | 17+（Android Studio 自带 JBR 即可） |
+| Kotlin | AGP 9 **内置**，不额外应用 `org.jetbrains.kotlin.android` |
+
+命令行构建：
+
+```bash
+./gradlew :app:assembleDebug      # 产物 app/build/outputs/apk/debug/app-debug.apk
+./gradlew :app:installDebug       # 连接设备后直接安装
+```
+
+用 Android Studio 打开根目录即可，首次同步需联网下载 AGP 与 androidx 依赖；
+`local.properties`（SDK 路径）由 Android Studio 自动生成，已在 `.gitignore` 中忽略。
+
+> **踩坑记录**：AGP 9 起内置 Kotlin 支持，若同时应用 `org.jetbrains.kotlin.android`
+> 会报 `Cannot add extension with name 'kotlin'`。本仓库因此只在根 `build.gradle.kts`
+> 声明 `com.android.application` / `com.android.library`，不再声明 Kotlin 插件。
 
 ## 提交规范
 
