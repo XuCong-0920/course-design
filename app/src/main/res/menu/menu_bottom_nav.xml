@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="@string/tab_home" />
+
+    <item
+        android:id="@+id/reviewFragment"
+        android:icon="@android:drawable/ic_menu_recent_history"
+        android:title="@string/tab_review" />
+
+    <item
+        android:id="@+id/statsFragment"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="@string/tab_stats" />
+
+    <item
+        android:id="@+id/mineFragment"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="@string/tab_mine" />
+
+</menu>

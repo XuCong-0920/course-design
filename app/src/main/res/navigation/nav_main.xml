@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.xucong.wordmemory.ui.home.HomeFragment"
+        android:label="@string/tab_home"
+        tools:layout="@layout/fragment_placeholder" />
+
+    <fragment
+        android:id="@+id/reviewFragment"
+        android:name="com.xucong.wordmemory.ui.review.ReviewFragment"
+        android:label="@string/tab_review"
+        tools:layout="@layout/fragment_placeholder" />
+
+    <fragment
+        android:id="@+id/statsFragment"
+        android:name="com.xucong.wordmemory.ui.stats.StatsFragment"
+        android:label="@string/tab_stats"
+        tools:layout="@layout/fragment_placeholder" />
+
+    <fragment
+        android:id="@+id/mineFragment"
+        android:name="com.xucong.wordmemory.ui.mine.MineFragment"
+        android:label="@string/tab_mine"
+        tools:layout="@layout/fragment_placeholder" />
+
+</navigation>
