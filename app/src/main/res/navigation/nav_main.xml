@@ -3,13 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/deckListFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.xucong.wordmemory.ui.home.HomeFragment"
-        android:label="@string/tab_home"
-        tools:layout="@layout/fragment_placeholder" />
+        android:id="@+id/deckListFragment"
+        android:name="com.xucong.wordmemory.ui.deck.DeckListFragment"
+        android:label="@string/tab_deck"
+        tools:layout="@layout/fragment_deck_list">
+        <action
+            android:id="@+id/action_deckList_to_wordList"
+            app:destination="@id/wordListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/wordListFragment"
+        android:name="com.xucong.wordmemory.ui.word.WordListFragment"
+        android:label="@string/tab_deck"
+        tools:layout="@layout/fragment_word_list">
+        <argument
+            android:name="deckId"
+            app:argType="long" />
+        <argument
+            android:name="deckName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_wordList_to_wordDetail"
+            app:destination="@id/wordDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/wordDetailFragment"
+        android:name="com.xucong.wordmemory.ui.word.WordDetailFragment"
+        android:label="@string/word_detail_title"
+        tools:layout="@layout/fragment_word_detail">
+        <argument
+            android:name="wordId"
+            app:argType="long" />
+    </fragment>
 
     <fragment
         android:id="@+id/reviewFragment"

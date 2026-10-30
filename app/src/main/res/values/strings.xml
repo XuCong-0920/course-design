@@ -2,16 +2,28 @@
 <resources>
     <string name="app_name">单词记忆 B4</string>
 
-    <string name="tab_home">今日</string>
+    <string name="tab_deck">词库</string>
     <string name="tab_review">复习</string>
     <string name="tab_stats">统计</string>
     <string name="tab_mine">我的</string>
 
-    <string name="home_title">今日复习队列</string>
-    <string name="home_placeholder">骨架占位：第 4 次课接入 Room 后，这里显示今天到期的新词与复习词。</string>
+    <string name="deck_list_title">我的词库</string>
+    <string name="deck_list_subtitle">点击词库查看单词列表</string>
+    <string name="deck_list_empty">还没有词库，稍等片刻或从「我的」导入</string>
+    <string name="deck_word_count">%1$d 个单词</string>
+    <string name="deck_due_count">今日待复习 %1$d 个</string>
+
+    <string name="word_list_empty">这个词库还没有单词</string>
+    <string name="word_detail_title">单词详情</string>
+    <string name="word_detail_meaning">释义</string>
+    <string name="word_detail_example">例句</string>
+    <string name="word_detail_srs">复习状态</string>
+    <string name="word_detail_srs_value">已答对 %1$d 次 · 间隔 %2$d 天 · 难度因子 %3$.2f</string>
+    <string name="word_detail_due_now">现在到期</string>
+    <string name="word_detail_due_later">%1$s 到期</string>
 
     <string name="review_title">复习</string>
-    <string name="review_placeholder">骨架占位：艾宾浩斯调度（SrsScheduler）与答题卡将在第 5 次课接入。</string>
+    <string name="review_placeholder">骨架占位：艾宾浩斯调度（SrsScheduler）与答题卡将在下一次课接入。</string>
 
     <string name="stats_title">统计</string>
     <string name="stats_placeholder">骨架占位：词汇量、连续打卡、遗忘曲线命中率分布。</string>
