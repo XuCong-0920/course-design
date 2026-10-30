@@ -49,17 +49,26 @@ course-design/
 │  ├─ build.gradle.kts           # applicationId com.xucong.wordmemory
 │  └─ src/main/
 │     ├─ java/com/xucong/wordmemory/
-│     │  ├─ MainActivity.kt              # 唯一 Activity：NavHost + BottomNav
+│     │  ├─ WordMemoryApp.kt              # Application：数据库/仓库单例，启动播种
+│     │  ├─ MainActivity.kt               # 唯一 Activity：NavHost + BottomNav
+│     │  ├─ data/
+│     │  │  ├─ WordRepository.kt          # 唯一数据入口（ViewModel 只依赖它）
+│     │  │  ├─ SeedData.kt                # 内置两个示例词库
+│     │  │  └─ local/
+│     │  │     ├─ WordDatabase.kt         # Room 数据库单例（version 1）
+│     │  │     ├─ entity/                 # DeckEntity / WordEntity / ReviewRecordEntity
+│     │  │     └─ dao/                    # DeckDao / WordDao / ReviewRecordDao
 │     │  └─ ui/
 │     │     ├─ common/BasePlaceholderFragment.kt
-│     │     ├─ home/HomeFragment.kt      # 今日
-│     │     ├─ review/ReviewFragment.kt  # 复习
-│     │     ├─ stats/StatsFragment.kt    # 统计
-│     │     └─ mine/MineFragment.kt      # 我的（含伴生模块连通性验证）
+│     │     ├─ deck/                      # 词库列表：Fragment + ViewModel + Adapter
+│     │     ├─ word/                      # 单词列表 / 单词详情（列表 → 详情）
+│     │     ├─ review/ReviewFragment.kt   # 复习（第 5 次课接入 SRS）
+│     │     ├─ stats/StatsFragment.kt     # 统计
+│     │     └─ mine/MineFragment.kt       # 我的（含伴生模块连通性验证）
 │     └─ res/
-│        ├─ layout/activity_main.xml、fragment_placeholder.xml
-│        ├─ navigation/nav_main.xml      # 4 个目的地
-│        ├─ menu/menu_bottom_nav.xml     # 底部导航，item id 与目的地 id 一致
+│        ├─ layout/                       # activity_main、fragment_*、item_deck、item_word
+│        ├─ navigation/nav_main.xml       # startDestination = deckListFragment
+│        ├─ menu/menu_bottom_nav.xml      # 底部导航，item id 与目的地 id 一致
 │        └─ values/strings.xml、themes.xml
 ├─ companion/                    # 伴生模块（1 学分，Android Library）
 │  └─ src/main/java/com/xucong/wordmemory/companion/CompanionBridge.kt
@@ -82,6 +91,8 @@ course-design/
 | minSdk | 24 |
 | JDK | 17+（Android Studio 自带 JBR 即可） |
 | Kotlin | AGP 9 **内置**，不额外应用 `org.jetbrains.kotlin.android` |
+| Room | 2.8.5（`room-runtime` / `room-ktx` + KSP 编译器） |
+| KSP | 2.2.10-2.0.2 |
 
 命令行构建：
 
@@ -93,9 +104,27 @@ course-design/
 用 Android Studio 打开根目录即可，首次同步需联网下载 AGP 与 androidx 依赖；
 `local.properties`（SDK 路径）由 Android Studio 自动生成，已在 `.gitignore` 中忽略。
 
-> **踩坑记录**：AGP 9 起内置 Kotlin 支持，若同时应用 `org.jetbrains.kotlin.android`
+> **踩坑记录 1**：AGP 9 起内置 Kotlin 支持，若同时应用 `org.jetbrains.kotlin.android`
 > 会报 `Cannot add extension with name 'kotlin'`。本仓库因此只在根 `build.gradle.kts`
 > 声明 `com.android.application` / `com.android.library`，不再声明 Kotlin 插件。
+
+> **踩坑记录 2**：内置 Kotlin 与 KSP 同时启用时，KSP 会报
+> `Using kotlin.sourceSets DSL to add Kotlin sources is not allowed with built-in Kotlin`。
+> 解决方式是在 `gradle.properties` 中显式设置 `android.disallowKotlinSourceSets=false`
+> （KSP 尚未适配内置 Kotlin 的 sourceSets，属过渡期开关）。
+
+## 当前进度
+
+| 课次 | 里程碑 | 状态 |
+| --- | --- | --- |
+| 1 | 选题 + 功能清单 + 建仓 | ✅ 2 次提交 |
+| 2 | 技术方案 + 数据模型 | ✅ 见 `docs/02-技术方案.md` |
+| 3 | 骨架 + 导航 + 基础 UI | ✅ 1 次提交（+ 1 次 .gitattributes） |
+| 4 | 数据持久化（Room） | ✅ 3 次提交：实体/DAO/数据库 → 仓库层与种子数据 → 三级界面打通 |
+| 5 | 自定义算法（SRS 调度） | ⏳ 待做 |
+| 6–10 | 复习/测试主流程、通知、伴生模块、录制与答辩 | ⏳ 待做 |
+
+提交节奏：按里程碑逐次提交（功能拆成「数据层 → 逻辑层 → UI 联调」多次），全周期需 **≥15 次有意义的提交**。
 
 ## 提交规范
 
