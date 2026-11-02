@@ -58,15 +58,19 @@ course-design/
 │     │  │     ├─ WordDatabase.kt         # Room 数据库单例（version 1）
 │     │  │     ├─ entity/                 # DeckEntity / WordEntity / ReviewRecordEntity
 │     │  │     └─ dao/                    # DeckDao / WordDao / ReviewRecordDao
+│     │  ├─ domain/
+│     │  │  └─ srs/SrsScheduler.kt        # 简化 SM-2 调度算法（纯 Kotlin，可单测）
+│     │  ├─ notification/                 # WorkManager 每日提醒 + 通知三操作 + 权限降级
 │     │  └─ ui/
 │     │     ├─ common/BasePlaceholderFragment.kt
 │     │     ├─ deck/                      # 词库列表：Fragment + ViewModel + Adapter
 │     │     ├─ word/                      # 单词列表 / 单词详情（列表 → 详情）
-│     │     ├─ review/ReviewFragment.kt   # 复习（第 5 次课接入 SRS）
+│     │     ├─ review/                    # 复习：ViewModel 持有到期队列 + 三档反馈
 │     │     ├─ stats/StatsFragment.kt     # 统计
-│     │     └─ mine/MineFragment.kt       # 我的（含伴生模块连通性验证）
+│     │     └─ mine/MineFragment.kt       # 我的：提醒开关、测试提醒、伴生模块状态
 │     └─ res/
 │        ├─ layout/                       # activity_main、fragment_*、item_deck、item_word
+│        ├─ drawable/ic_notification.xml  # 通知栏小图标
 │        ├─ navigation/nav_main.xml       # startDestination = deckListFragment
 │        ├─ menu/menu_bottom_nav.xml      # 底部导航，item id 与目的地 id 一致
 │        └─ values/strings.xml、themes.xml
@@ -93,11 +97,14 @@ course-design/
 | Kotlin | AGP 9 **内置**，不额外应用 `org.jetbrains.kotlin.android` |
 | Room | 2.8.5（`room-runtime` / `room-ktx` + KSP 编译器） |
 | KSP | 2.2.10-2.0.2 |
+| WorkManager | 2.12.0（每日提醒周期任务 + 延迟重发） |
+| JUnit | 4.13.2（纯 JVM 单元测试，不需要设备） |
 
-命令行构建：
+命令行构建与测试：
 
 ```bash
 ./gradlew :app:assembleDebug      # 产物 app/build/outputs/apk/debug/app-debug.apk
+./gradlew :app:testDebugUnitTest  # SRS 调度算法单元测试（11 个用例）
 ./gradlew :app:installDebug       # 连接设备后直接安装
 ```
 
@@ -113,6 +120,11 @@ course-design/
 > 解决方式是在 `gradle.properties` 中显式设置 `android.disallowKotlinSourceSets=false`
 > （KSP 尚未适配内置 Kotlin 的 sourceSets，属过渡期开关）。
 
+> **踩坑记录 3**：复习页三档按钮一开始「看不见」。原因是卡片底边约束到了「显示答案」按钮上，
+> 翻开答案时该按钮 `GONE`，卡片（带 `elevation`）一路铺到底部，把按钮行盖在了下层。
+> 解决方式：把「显示答案 / 三档反馈」放进始终存在的 `FrameLayout`（`actionBar`），卡片锚到它，
+> 两个按钮组在容器内切换可见性。教训是**不要拿会被隐藏的 View 当约束锚点**。
+
 ## 当前进度
 
 | 课次 | 里程碑 | 状态 |
@@ -121,8 +133,9 @@ course-design/
 | 2 | 技术方案 + 数据模型 | ✅ 见 `docs/02-技术方案.md` |
 | 3 | 骨架 + 导航 + 基础 UI | ✅ 1 次提交（+ 1 次 .gitattributes） |
 | 4 | 数据持久化（Room） | ✅ 3 次提交：实体/DAO/数据库 → 仓库层与种子数据 → 三级界面打通 |
-| 5 | 自定义算法（SRS 调度） | ⏳ 待做 |
-| 6–10 | 复习/测试主流程、通知、伴生模块、录制与答辩 | ⏳ 待做 |
+| 5 | 自定义算法（SRS）+ 复习主流程 + 通知 | ✅ 4 次提交：调度算法与单测 → 复习页接入 → 按钮遮挡修复 → WorkManager 提醒 |
+| 6 | 测试模式 + 统计页 | ⏳ 待做 |
+| 7–10 | 权限降级打磨、伴生模块、录制与答辩 | ⏳ 待做 |
 
 提交节奏：按里程碑逐次提交（功能拆成「数据层 → 逻辑层 → UI 联调」多次），全周期需 **≥15 次有意义的提交**。
 
