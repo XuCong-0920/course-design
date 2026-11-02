@@ -33,6 +33,10 @@ interface WordDao {
     @Query("SELECT COUNT(*) FROM words WHERE deckId = :deckId")
     suspend fun countByDeck(deckId: Long): Int
 
+    /** 全库到期数量，供每日提醒判断「今天到底有没有东西可复习」。 */
+    @Query("SELECT COUNT(*) FROM words WHERE dueAt <= :now")
+    suspend fun countDue(now: Long): Int
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(word: WordEntity): Long
 

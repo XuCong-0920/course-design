@@ -57,6 +57,6 @@
         android:id="@+id/mineFragment"
         android:name="com.xucong.wordmemory.ui.mine.MineFragment"
         android:label="@string/tab_mine"
-        tools:layout="@layout/fragment_placeholder" />
+        tools:layout="@layout/fragment_mine" />
 
 </navigation>

@@ -40,7 +40,25 @@
     <string name="stats_placeholder">骨架占位：词汇量、连续打卡、遗忘曲线命中率分布。</string>
 
     <string name="mine_title">我的</string>
+    <string name="mine_subtitle">提醒设置与模块状态</string>
     <string name="mine_placeholder">骨架占位：词库导入、提醒时间设置、伴生模块入口。</string>
+    <string name="mine_section_reminder">每日提醒</string>
+    <string name="mine_reminder_switch">每天提醒我复习</string>
+    <string name="mine_reminder_time">提醒时间：每天 %1$d:00（到期词为 0 时不打扰）</string>
+    <string name="mine_test_reminder">立即发一条测试提醒</string>
+    <string name="mine_permission_missing">还没授予通知权限：到点不会弹出提醒，可到系统设置里开启。</string>
+    <string name="mine_section_more">关于</string>
+    <string name="mine_more_hint">词库导入、统计报表与伴生模块入口将在后续课程接入。</string>
+    <string name="mine_companion_status">伴生模块：%1$s（就绪=%2$b）</string>
+    <string name="mine_version">单词记忆 B4 · 课程设计 v0.5</string>
 
     <string name="skeleton_tag">工程骨架 · 单 Activity + Navigation</string>
+
+    <string name="reminder_channel_name">复习提醒</string>
+    <string name="reminder_channel_desc">每天在固定时间提醒你复习到期的单词</string>
+    <string name="reminder_title">今天有 %1$d 个单词该复习了</string>
+    <string name="reminder_text">趁遗忘曲线还没掉下去，花几分钟过一轮</string>
+    <string name="reminder_action_review">去复习</string>
+    <string name="reminder_action_snooze">10 分钟后</string>
+    <string name="reminder_action_skip">今天不提醒</string>
 </resources>

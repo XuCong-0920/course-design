@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Android 13+ 发通知需要运行时授权，见 MainActivity 里的申请逻辑与「我的」页降级提示 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:name=".WordMemoryApp"
         android:allowBackup="true"
@@ -10,12 +13,19 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 通知上的「10 分钟后 / 今天不提醒」由这个 Receiver 处理，不需要导出 -->
+        <receiver
+            android:name=".notification.ReminderActionReceiver"
+            android:exported="false" />
+
     </application>
 
 </manifest>

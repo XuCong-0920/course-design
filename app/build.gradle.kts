@@ -45,6 +45,9 @@ dependencies {
     implementation("androidx.room:room-ktx:2.8.5")
     ksp("androidx.room:room-compiler:2.8.5")
 
+    // WorkManager：每日复习提醒（周期任务 + 一次性延迟重发）
+    implementation("androidx.work:work-runtime-ktx:2.12.0")
+
     // 纯 JVM 单元测试（SRS 调度算法等，不需要设备/模拟器）
     testImplementation("junit:junit:4.13.2")
 }
