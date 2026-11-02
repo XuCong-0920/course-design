@@ -20,6 +20,16 @@ interface WordDao {
     @Query("SELECT * FROM words WHERE deckId = :deckId AND dueAt <= :now ORDER BY dueAt ASC")
     suspend fun dueWords(deckId: Long, now: Long = System.currentTimeMillis()): List<WordEntity>
 
+    /**
+     * 跨词库的到期队列：复习页不区分词库，按到期时间从早到晚取前 [limit] 个。
+     * 加 limit 是为了避免首次学习时一次性把几百个新词全塞进内存。
+     */
+    @Query("SELECT * FROM words WHERE dueAt <= :now ORDER BY dueAt ASC LIMIT :limit")
+    suspend fun dueWordsAll(now: Long, limit: Int): List<WordEntity>
+
+    @Query("SELECT * FROM words WHERE id = :wordId")
+    suspend fun getById(wordId: Long): WordEntity?
+
     @Query("SELECT COUNT(*) FROM words WHERE deckId = :deckId")
     suspend fun countByDeck(deckId: Long): Int
 

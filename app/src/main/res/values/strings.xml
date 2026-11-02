@@ -24,6 +24,17 @@
 
     <string name="review_title">复习</string>
     <string name="review_placeholder">骨架占位：艾宾浩斯调度（SrsScheduler）与答题卡将在下一次课接入。</string>
+    <string name="review_remaining">还剩 %1$d 个</string>
+    <string name="review_counts">认识 %1$d · 模糊 %2$d · 不认识 %3$d</string>
+    <string name="review_show_answer">显示答案</string>
+    <string name="review_grade_forgot">不认识</string>
+    <string name="review_grade_vague">模糊</string>
+    <string name="review_grade_known">认识</string>
+    <string name="review_hint_new">新词：答对后 1 天再复习</string>
+    <string name="review_hint_interval">当前间隔 %1$d 天，按记忆曲线自动调整</string>
+    <string name="review_empty">今天没有到期的单词。去「词库」里读一读，或稍后再来。</string>
+    <string name="review_finished">本轮复习完成，记得明天再来。</string>
+    <string name="review_restart">再来一轮</string>
 
     <string name="stats_title">统计</string>
     <string name="stats_placeholder">骨架占位：词汇量、连续打卡、遗忘曲线命中率分布。</string>

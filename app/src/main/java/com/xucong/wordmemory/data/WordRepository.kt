@@ -3,7 +3,11 @@ package com.xucong.wordmemory.data
 import com.xucong.wordmemory.data.local.WordDatabase
 import com.xucong.wordmemory.data.local.dao.DeckSummary
 import com.xucong.wordmemory.data.local.entity.DeckEntity
+import com.xucong.wordmemory.data.local.entity.ReviewRecordEntity
 import com.xucong.wordmemory.data.local.entity.WordEntity
+import com.xucong.wordmemory.domain.srs.ReviewGrade
+import com.xucong.wordmemory.domain.srs.SrsScheduler
+import com.xucong.wordmemory.domain.srs.SrsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -30,6 +34,49 @@ class WordRepository(private val database: WordDatabase) {
 
     suspend fun dueWords(deckId: Long, now: Long = System.currentTimeMillis()): List<WordEntity> =
         wordDao.dueWords(deckId, now)
+
+    /** 复习页的跨词库到期队列。 */
+    suspend fun dueQueue(now: Long = System.currentTimeMillis(), limit: Int = DEFAULT_QUEUE_LIMIT): List<WordEntity> =
+        wordDao.dueWordsAll(now, limit)
+
+    /**
+     * 提交一次复习反馈：先算新调度状态，再在**同一个事务**里更新单词与写入复习记录。
+     * 两者必须同生共死——否则会出现「记录写了但间隔没涨」或反之，统计与调度就对不上了。
+     */
+    suspend fun submitReview(
+        word: WordEntity,
+        grade: ReviewGrade,
+        now: Long = System.currentTimeMillis(),
+    ): SrsState {
+        val before = SrsState(
+            repetition = word.repetition,
+            intervalDays = word.intervalDays,
+            easeFactor = word.easeFactor,
+            dueAt = word.dueAt,
+        )
+        val after = SrsScheduler.schedule(before, grade, now)
+
+        database.withTransaction {
+            wordDao.update(
+                word.copy(
+                    repetition = after.repetition,
+                    intervalDays = after.intervalDays,
+                    easeFactor = after.easeFactor,
+                    dueAt = after.dueAt,
+                    lastReviewedAt = now,
+                ),
+            )
+            reviewRecordDao.insert(
+                ReviewRecordEntity(
+                    wordId = word.id,
+                    grade = grade.toDbValue(),
+                    reviewedAt = now,
+                    intervalDaysAfter = after.intervalDays,
+                ),
+            )
+        }
+        return after
+    }
 
     suspend fun wordCount(deckId: Long): Int = wordDao.countByDeck(deckId)
 
@@ -64,5 +111,10 @@ class WordRepository(private val database: WordDatabase) {
                 )
             }
         }
+    }
+
+    companion object {
+        /** 单次复习最多取多少个词，防止新词库首次学习时一次加载过多。 */
+        private const val DEFAULT_QUEUE_LIMIT = 50
     }
 }

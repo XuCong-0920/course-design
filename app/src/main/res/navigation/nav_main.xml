@@ -45,7 +45,7 @@
         android:id="@+id/reviewFragment"
         android:name="com.xucong.wordmemory.ui.review.ReviewFragment"
         android:label="@string/tab_review"
-        tools:layout="@layout/fragment_placeholder" />
+        tools:layout="@layout/fragment_review" />
 
     <fragment
         android:id="@+id/statsFragment"
