@@ -29,6 +29,10 @@
         app:layout_constraintTop_toBottomOf="@id/progressText"
         tools:text="认识 3 · 模糊 1 · 不认识 2" />
 
+    <!--
+        卡片底部锚在 actionBar 上（而不是某个按钮上）：按钮在「显示答案 / 三档反馈」之间切换时，
+        如果锚点本身被 GONE 掉，卡片会一路铺到底部并把按钮盖住（卡片有 elevation，绘制在上层）。
+    -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
         android:layout_width="0dp"
@@ -36,7 +40,7 @@
         android:layout_marginTop="16dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="2dp"
-        app:layout_constraintBottom_toTopOf="@id/revealButton"
+        app:layout_constraintBottom_toTopOf="@id/actionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/countText">
@@ -116,52 +120,55 @@
         </ScrollView>
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/revealButton"
+    <FrameLayout
+        android:id="@+id/actionBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/review_show_answer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/gradeGroup"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible">
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/forgotButton"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="0dp"
+            android:id="@+id/revealButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/review_grade_forgot" />
+            android:text="@string/review_show_answer" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/vagueButton"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/gradeGroup"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:text="@string/review_grade_vague" />
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:visibility="visible">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/knownButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:text="@string/review_grade_known" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/forgotButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/review_grade_forgot" />
 
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/vagueButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="@string/review_grade_vague" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/knownButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="@string/review_grade_known" />
+
+        </LinearLayout>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/statusText"
@@ -181,9 +188,10 @@
         android:id="@+id/restartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="@string/review_restart"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/actionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />

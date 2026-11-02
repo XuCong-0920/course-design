@@ -58,6 +58,7 @@ class ReviewFragment : Fragment(R.layout.fragment_review) {
         binding.progressText.isVisible = hasCard
         binding.countText.isVisible = hasCard
         binding.card.isVisible = hasCard
+        binding.actionBar.isVisible = hasCard
         binding.revealButton.isVisible = hasCard && !state.revealed
         binding.gradeGroup.isVisible = hasCard && state.revealed
 
