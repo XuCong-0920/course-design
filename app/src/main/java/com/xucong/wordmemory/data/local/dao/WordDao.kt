@@ -37,6 +37,9 @@ interface WordDao {
     @Query("SELECT COUNT(*) FROM words WHERE dueAt <= :now")
     suspend fun countDue(now: Long): Int
 
+    @Query("SELECT COUNT(*) FROM words")
+    suspend fun countAll(): Int
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(word: WordEntity): Long
 

@@ -38,6 +38,19 @@
 
     <string name="stats_title">统计</string>
     <string name="stats_placeholder">骨架占位：词汇量、连续打卡、遗忘曲线命中率分布。</string>
+    <string name="stats_subtitle">数据来自每一次「认识 / 模糊 / 不认识」的复习记录</string>
+    <string name="stats_today_due_label">今天待复习</string>
+    <string name="stats_today_done_label">今天已复习</string>
+    <string name="stats_streak_label">连续打卡</string>
+    <string name="stats_total_label">累计复习</string>
+    <string name="stats_accuracy_label">总正确率</string>
+    <string name="stats_value_days">%1$d 天</string>
+    <string name="stats_value_times">%1$d 次</string>
+    <string name="stats_value_percent">%1$d%%</string>
+    <string name="stats_week_title">近 7 天复习量</string>
+    <string name="stats_week_hint">柱高＝当天复习的词数；模糊与认识都算通过</string>
+    <string name="stats_empty">还没有复习记录。去「复习」过一轮，这里就会有数据了。</string>
+    <string name="stats_words">词库总词数 %1$d 个</string>
 
     <string name="mine_title">我的</string>
     <string name="mine_subtitle">提醒设置与模块状态</string>

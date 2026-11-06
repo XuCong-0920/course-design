@@ -8,6 +8,7 @@ import com.xucong.wordmemory.data.local.entity.WordEntity
 import com.xucong.wordmemory.domain.srs.ReviewGrade
 import com.xucong.wordmemory.domain.srs.SrsScheduler
 import com.xucong.wordmemory.domain.srs.SrsState
+import com.xucong.wordmemory.domain.stats.ReviewEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -79,6 +80,14 @@ class WordRepository(private val database: WordDatabase) {
     }
 
     suspend fun wordCount(deckId: Long): Int = wordDao.countByDeck(deckId)
+
+    suspend fun totalWordCount(): Int = wordDao.countAll()
+
+    suspend fun dueNow(now: Long = System.currentTimeMillis()): Int = wordDao.countDue(now)
+
+    /** 统计页的数据源：最近 [since] 之后的复习事件（只投影两列，不整行读取）。 */
+    suspend fun reviewEventsSince(since: Long): List<ReviewEvent> =
+        reviewRecordDao.eventsSince(since).map { ReviewEvent(it.reviewedAt, it.grade) }
 
     suspend fun addWord(word: WordEntity): Long = wordDao.insert(word)
 
