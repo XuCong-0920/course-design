@@ -29,6 +29,25 @@
         <action
             android:id="@+id/action_wordList_to_wordDetail"
             app:destination="@id/wordDetailFragment" />
+        <action
+            android:id="@+id/action_wordList_to_quiz"
+            app:destination="@id/quizFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/quizFragment"
+        android:name="com.xucong.wordmemory.ui.quiz.QuizFragment"
+        android:label="@string/quiz_title_choice"
+        tools:layout="@layout/fragment_quiz">
+        <argument
+            android:name="deckId"
+            app:argType="long" />
+        <argument
+            android:name="deckName"
+            app:argType="string" />
+        <argument
+            android:name="mode"
+            app:argType="string" />
     </fragment>
 
     <fragment

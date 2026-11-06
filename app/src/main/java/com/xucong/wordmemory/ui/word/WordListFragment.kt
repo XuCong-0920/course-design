@@ -41,6 +41,9 @@ class WordListFragment : Fragment(R.layout.fragment_word_list) {
         binding.wordList.layoutManager = LinearLayoutManager(requireContext())
         binding.wordList.adapter = adapter
 
+        binding.quizChoiceButton.setOnClickListener { openQuiz("choice") }
+        binding.quizSpellingButton.setOnClickListener { openQuiz("spelling") }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.words.collect { words ->
@@ -61,6 +64,15 @@ class WordListFragment : Fragment(R.layout.fragment_word_list) {
     private fun openWord(word: WordEntity) {
         val args = Bundle().apply { putLong(ARG_WORD_ID, word.id) }
         findNavController().navigate(R.id.action_wordList_to_wordDetail, args)
+    }
+
+    private fun openQuiz(mode: String) {
+        val args = Bundle().apply {
+            putLong(ARG_DECK_ID, deckId)
+            putString(ARG_DECK_NAME, requireArguments().getString(ARG_DECK_NAME))
+            putString("mode", mode)
+        }
+        findNavController().navigate(R.id.action_wordList_to_quiz, args)
     }
 
     private companion object {

@@ -17,6 +17,10 @@ interface WordDao {
     @Query("SELECT * FROM words WHERE id = :wordId")
     fun observeById(wordId: Long): Flow<WordEntity?>
 
+    /** 测试模式一次性取整个词库（不订阅变化，出题中途词库变了也不该换题）。 */
+    @Query("SELECT * FROM words WHERE deckId = :deckId ORDER BY term COLLATE NOCASE ASC")
+    suspend fun listByDeck(deckId: Long): List<WordEntity>
+
     @Query("SELECT * FROM words WHERE deckId = :deckId AND dueAt <= :now ORDER BY dueAt ASC")
     suspend fun dueWords(deckId: Long, now: Long = System.currentTimeMillis()): List<WordEntity>
 

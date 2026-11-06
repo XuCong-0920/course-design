@@ -31,6 +31,8 @@ class WordRepository(private val database: WordDatabase) {
 
     fun observeWords(deckId: Long): Flow<List<WordEntity>> = wordDao.observeByDeck(deckId)
 
+    suspend fun wordsOf(deckId: Long): List<WordEntity> = wordDao.listByDeck(deckId)
+
     fun observeWord(wordId: Long): Flow<WordEntity?> = wordDao.observeById(wordId)
 
     suspend fun dueWords(deckId: Long, now: Long = System.currentTimeMillis()): List<WordEntity> =

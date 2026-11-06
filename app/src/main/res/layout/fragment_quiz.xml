@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/deckTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                tools:text="B4 结课词表 · 选择题" />
+
+            <TextView
+                android:id="@+id/progressText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                tools:text="3 / 10" />
+        </LinearLayout>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:trackCornerRadius="4dp" />
+
+        <!-- 答题区 -->
+        <LinearLayout
+            android:id="@+id/questionGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:minHeight="160dp"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:id="@+id/promptText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAppearance="?attr/textAppearanceHeadlineMedium"
+                        tools:text="abandon" />
+
+                    <TextView
+                        android:id="@+id/promptHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        tools:text="/əˈbændən/" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:id="@+id/optionGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/option0"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="start|center_vertical"
+                    android:minHeight="56dp"
+                    tools:text="v. 放弃；抛弃" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/option1"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="start|center_vertical"
+                    android:minHeight="56dp"
+                    tools:text="n. 益处" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/option2"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="start|center_vertical"
+                    android:minHeight="56dp"
+                    tools:text="adj. 至关重要的" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/option3"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start|center_vertical"
+                    android:minHeight="56dp"
+                    tools:text="v. 下降；婉拒" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/spellingGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="?attr/textInputOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/quiz_spelling_hint">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/spellingInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/submitSpelling"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:minHeight="48dp"
+                    android:text="@string/quiz_submit" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/feedbackText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                tools:text="答对了" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/nextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:minHeight="48dp"
+                android:text="@string/quiz_next"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
+
+        <!-- 结果区 -->
+        <LinearLayout
+            android:id="@+id/resultGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/resultScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="?attr/textAppearanceHeadlineMedium"
+                tools:text="10 题答对 8 题（80%）" />
+
+            <TextView
+                android:id="@+id/resultWrong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                tools:text="错词：abandon、crucial" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/restartButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:minHeight="48dp"
+                android:text="@string/quiz_restart" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/backButton"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:minHeight="48dp"
+                android:text="@string/quiz_back" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
