@@ -22,6 +22,8 @@ android {
 
     buildFeatures {
         viewBinding = true
+        // 录屏水印用 BuildConfig.DEBUG 判断，release 包里不会画水印
+        buildConfig = true
     }
 }
 

@@ -13,6 +13,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.xucong.wordmemory.databinding.ActivityMainBinding
 import com.xucong.wordmemory.notification.ReminderNotifications
 import com.xucong.wordmemory.notification.ReminderScheduler
+import com.xucong.wordmemory.ui.common.DebugWatermark
 
 /**
  * 应用唯一 Activity：承载 Navigation 的 NavHostFragment 与底部导航。
@@ -44,6 +45,9 @@ class MainActivity : AppCompatActivity() {
         applyReminder(intent)
         ensureNotificationPermission()
         ReminderScheduler.scheduleDaily(this)
+
+        // 答辩录屏要求界面带学号姓名水印：只在 debug 包生效，release 包里是空操作
+        DebugWatermark.attachIfDebug(this)
     }
 
     override fun onNewIntent(intent: Intent) {
