@@ -5,6 +5,7 @@ import com.xucong.wordmemory.data.local.dao.DeckSummary
 import com.xucong.wordmemory.data.local.entity.DeckEntity
 import com.xucong.wordmemory.data.local.entity.ReviewRecordEntity
 import com.xucong.wordmemory.data.local.entity.WordEntity
+import com.xucong.wordmemory.domain.importer.ImportWord
 import com.xucong.wordmemory.domain.srs.ReviewGrade
 import com.xucong.wordmemory.domain.srs.SrsScheduler
 import com.xucong.wordmemory.domain.srs.SrsState
@@ -124,8 +125,56 @@ class WordRepository(private val database: WordDatabase) {
         }
     }
 
+    /**
+     * 把解析好的词写成一个新词库。
+     *
+     * 三点取舍：
+     * 1. **整体一个事务**：词库和词必须同生共死，否则会留下空词库或写一半的残局；
+     * 2. **靠 `(deckId, term)` 唯一索引去重**，`OnConflictStrategy.IGNORE` 返回 -1 就是被忽略的行，
+     *    这里直接数 -1 的个数当「库里已有、跳过」的数量，不额外查一遍；
+     * 3. 新词的 `dueAt` 设为当前时间 —— 导入完立刻能复习，符合「今天刚加的词今天就背」。
+     */
+    suspend fun importDeck(
+        deckName: String,
+        description: String,
+        words: List<ImportWord>,
+        now: Long = System.currentTimeMillis(),
+    ): ImportOutcome = withContext(Dispatchers.IO) {
+        if (words.isEmpty()) return@withContext ImportOutcome(NOT_IMPORTED, 0, 0)
+
+        database.withTransaction {
+            val deckId = deckDao.insert(DeckEntity(name = deckName, description = description))
+            val rowIds = wordDao.insertAll(
+                words.map { word ->
+                    WordEntity(
+                        deckId = deckId,
+                        term = word.term,
+                        phonetic = word.phonetic,
+                        meaning = word.meaning,
+                        example = word.example,
+                        dueAt = now,
+                    )
+                },
+            )
+            val inserted = rowIds.count { it > 0 }
+            ImportOutcome(deckId, inserted, rowIds.size - inserted)
+        }
+    }
+
     companion object {
         /** 单次复习最多取多少个词，防止新词库首次学习时一次加载过多。 */
         private const val DEFAULT_QUEUE_LIMIT = 50
+
+        /** 没有写入任何词时的词库 id。 */
+        const val NOT_IMPORTED = -1L
     }
+}
+
+/** [importDeck] 的结果：词库 id、真正写入的词数、因唯一索引被跳过的词数。 */
+data class ImportOutcome(
+    val deckId: Long,
+    val inserted: Int,
+    val skipped: Int,
+) {
+    val imported: Boolean get() = deckId != WordRepository.NOT_IMPORTED
 }
