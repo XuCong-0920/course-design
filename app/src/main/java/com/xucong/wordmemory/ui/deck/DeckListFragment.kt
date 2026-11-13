@@ -36,7 +36,8 @@ class DeckListFragment : Fragment(R.layout.fragment_deck_list) {
     private val binding get() = requireNotNull(_binding)
 
     private val viewModel: DeckListViewModel by viewModels {
-        DeckListViewModel.factory((requireActivity().application as WordMemoryApp).repository)
+        val app = requireActivity().application as WordMemoryApp
+        DeckListViewModel.factory(app.repository, app.dictionaryRepository)
     }
 
     private val adapter = DeckAdapter(::openDeck)
@@ -61,6 +62,7 @@ class DeckListFragment : Fragment(R.layout.fragment_deck_list) {
         binding.deckList.adapter = adapter
 
         binding.importButton.setOnClickListener { showFormatPicker() }
+        viewModel.loadDailySentence()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -71,6 +73,7 @@ class DeckListFragment : Fragment(R.layout.fragment_deck_list) {
                         binding.deckList.isVisible = decks.isNotEmpty()
                     }
                 }
+                launch { viewModel.daily.collect(::renderDaily) }
                 launch {
                     viewModel.importEvents.collect { outcome ->
                         if (!isAdded) return@collect
@@ -98,6 +101,47 @@ class DeckListFragment : Fragment(R.layout.fragment_deck_list) {
             putString(ARG_DECK_NAME, deck.name)
         }
         findNavController().navigate(R.id.action_deckList_to_wordList, args)
+    }
+
+    /**
+     * 每日例句卡片：加载中、空词库、有句子（在线/本地/离线）三种形态都在这里收口，
+     * 不让状态判断散在 XML 里。
+     */
+    private fun renderDaily(state: DeckListViewModel.DailyUiState) {
+        binding.dailyTermText.text = state.term
+
+        when {
+            state.loading -> {
+                binding.dailyTermText.isVisible = false
+                binding.dailySentenceText.text = getString(R.string.daily_loading)
+                binding.dailyStatusText.text = ""
+            }
+            state.empty -> {
+                binding.dailyTermText.isVisible = false
+                binding.dailySentenceText.text = getString(R.string.daily_empty)
+                binding.dailyStatusText.text = ""
+            }
+            state.english.isBlank() -> {
+                binding.dailyTermText.isVisible = true
+                binding.dailySentenceText.text = getString(R.string.daily_no_sentence)
+                binding.dailyStatusText.text = getString(sourceLabel(state.source))
+            }
+            else -> {
+                binding.dailyTermText.isVisible = true
+                binding.dailySentenceText.text = if (state.chinese.isBlank()) {
+                    state.english
+                } else {
+                    "${state.english}\n${state.chinese}"
+                }
+                binding.dailyStatusText.text = getString(sourceLabel(state.source))
+            }
+        }
+    }
+
+    private fun sourceLabel(source: DeckListViewModel.DailySource): Int = when (source) {
+        DeckListViewModel.DailySource.ONLINE -> R.string.daily_source_online
+        DeckListViewModel.DailySource.LOCAL -> R.string.daily_source_local
+        DeckListViewModel.DailySource.OFFLINE -> R.string.daily_source_offline
     }
 
     // ------------------------------------------------------------ 导入

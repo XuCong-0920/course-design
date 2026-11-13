@@ -55,4 +55,8 @@ interface WordDao {
 
     @Query("DELETE FROM words WHERE id = :wordId")
     suspend fun deleteById(wordId: Long)
+
+    /** 全库单词，按 id 升序——「每日例句」用它做确定性选择的基准。 */
+    @Query("SELECT * FROM words ORDER BY id ASC")
+    suspend fun listAll(): List<WordEntity>
 }

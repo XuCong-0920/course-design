@@ -34,6 +34,9 @@ class WordRepository(private val database: WordDatabase) {
 
     suspend fun wordsOf(deckId: Long): List<WordEntity> = wordDao.listByDeck(deckId)
 
+    /** 全库单词（含所有词库），按 id 升序；供每日例句挑选使用。 */
+    suspend fun allWords(): List<WordEntity> = wordDao.listAll()
+
     fun observeWord(wordId: Long): Flow<WordEntity?> = wordDao.observeById(wordId)
 
     suspend fun dueWords(deckId: Long, now: Long = System.currentTimeMillis()): List<WordEntity> =

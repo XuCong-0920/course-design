@@ -5,6 +5,8 @@ import com.xucong.wordmemory.companion.CompanionBridge
 import com.xucong.wordmemory.companion.DueDataProvider
 import com.xucong.wordmemory.data.WordRepository
 import com.xucong.wordmemory.data.local.WordDatabase
+import com.xucong.wordmemory.data.remote.DictionaryRepository
+import com.xucong.wordmemory.data.remote.PrefsDictCache
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -19,6 +21,11 @@ class WordMemoryApp : Application() {
     val database: WordDatabase by lazy { WordDatabase.get(this) }
 
     val repository: WordRepository by lazy { WordRepository(database) }
+
+    /** 在线词典：缓存 7 天，命中缓存时不产生网络请求。 */
+    val dictionaryRepository: DictionaryRepository by lazy {
+        DictionaryRepository(cache = PrefsDictCache(this))
+    }
 
     override fun onCreate() {
         super.onCreate()

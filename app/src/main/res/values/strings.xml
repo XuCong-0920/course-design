@@ -36,6 +36,24 @@
     <string name="word_detail_due_now">现在到期</string>
     <string name="word_detail_due_later">%1$s 到期</string>
 
+    <!-- 联网：发音与在线词典 -->
+    <string name="word_detail_speak">发音</string>
+    <string name="word_detail_speak_failed">发音加载失败：%1$s</string>
+    <string name="word_detail_online">联网补充</string>
+    <string name="word_detail_online_loading">查询中…</string>
+    <string name="word_detail_online_title">在线词典</string>
+    <string name="word_detail_online_status">来自有道词典 · 本地缓存 7 天</string>
+    <string name="word_detail_online_failed">联网失败：%1$s</string>
+
+    <!-- 词库页的每日例句卡片 -->
+    <string name="daily_title">每日例句</string>
+    <string name="daily_loading">正在挑今天的句子…</string>
+    <string name="daily_empty">词库里还没有单词，先导入或添加一个</string>
+    <string name="daily_no_sentence">这个词暂时没有例句</string>
+    <string name="daily_source_online">例句来自有道词典</string>
+    <string name="daily_source_local">例句来自本机词库</string>
+    <string name="daily_source_offline">当前离线，先显示本机例句；联网后会自动换成在线例句</string>
+
     <string name="review_title">复习</string>
     <string name="review_placeholder">骨架占位：艾宾浩斯调度（SrsScheduler）与答题卡将在下一次课接入。</string>
     <string name="review_remaining">还剩 %1$d 个</string>
