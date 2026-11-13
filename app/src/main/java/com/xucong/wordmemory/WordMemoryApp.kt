@@ -1,6 +1,8 @@
 package com.xucong.wordmemory
 
 import android.app.Application
+import com.xucong.wordmemory.companion.CompanionBridge
+import com.xucong.wordmemory.companion.DueDataProvider
 import com.xucong.wordmemory.data.WordRepository
 import com.xucong.wordmemory.data.local.WordDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +22,14 @@ class WordMemoryApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // 把主 App 的只读数据能力注册给伴生模块：模块只看到 DueDataProvider 接口，
+        // 不依赖 Room / Entity，编译期也不会反向依赖主 App。
+        CompanionBridge.bind(
+            object : DueDataProvider {
+                override suspend fun totalWordCount(): Int = repository.totalWordCount()
+                override suspend fun dueCount(now: Long): Int = repository.dueNow(now)
+            },
+        )
         applicationScope.launch { repository.ensureSeeded() }
     }
 

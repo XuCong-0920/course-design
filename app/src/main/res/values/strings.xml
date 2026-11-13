@@ -79,11 +79,13 @@
     <string name="mine_reminder_switch">每天提醒我复习</string>
     <string name="mine_reminder_time">提醒时间：每天 %1$d:00（到期词为 0 时不打扰）</string>
     <string name="mine_test_reminder">立即发一条测试提醒</string>
-    <string name="mine_permission_missing">还没授予通知权限：到点不会弹出提醒，可到系统设置里开启。</string>
+    <string name="mine_permission_missing">还没授予通知权限：到点不会弹出提醒。复习、测试、统计等所有功能照常可用。</string>
+    <string name="mine_open_settings">去系统设置里开启通知</string>
     <string name="mine_section_more">关于</string>
-    <string name="mine_more_hint">词库导入、统计报表与伴生模块入口将在后续课程接入。</string>
-    <string name="mine_companion_status">伴生模块：%1$s（就绪=%2$b）</string>
-    <string name="mine_version">单词记忆 B4 · 课程设计 v0.5</string>
+    <string name="mine_more_hint">词库导入（CSV/JSON）将在下一次课接入；已有两套内置示例词库。</string>
+    <string name="mine_companion_status">伴生模块 %1$s 已连接：主 App 共 %2$d 个词，当前 %3$d 个待复习</string>
+    <string name="mine_companion_unbound">伴生模块 %1$s 未连接</string>
+    <string name="mine_version">单词记忆 B4 · 课程设计 v0.7</string>
 
     <string name="skeleton_tag">工程骨架 · 单 Activity + Navigation</string>
 

@@ -64,7 +64,7 @@ course-design/
 │     │  │  └─ quiz/QuizBuilder.kt         # 测试模式出题 + 拼写判定
 │     │  ├─ notification/                 # WorkManager 每日提醒 + 通知三操作 + 权限降级
 │     │  └─ ui/
-│     │     ├─ common/BasePlaceholderFragment.kt
+│     │     ├─ common/                    # BasePlaceholderFragment、DebugWatermark（debug 学号水印）
 │     │     ├─ deck/                      # 词库列表：Fragment + ViewModel + Adapter
 │     │     ├─ word/                      # 单词列表 / 单词详情（列表 → 详情，含测试入口）
 │     │     ├─ review/                    # 复习：ViewModel 持有到期队列 + 三档反馈
@@ -78,7 +78,9 @@ course-design/
 │        ├─ menu/menu_bottom_nav.xml      # 底部导航，item id 与目的地 id 一致
 │        └─ values/strings.xml、themes.xml
 ├─ companion/                    # 伴生模块（1 学分，Android Library）
-│  └─ src/main/java/com/xucong/wordmemory/companion/CompanionBridge.kt
+│  ├─ README.md                  # 模块职责、依赖方向、接口契约
+│  ├─ src/main/java/com/xucong/wordmemory/companion/CompanionBridge.kt
+│  └─ src/test/java/com/xucong/wordmemory/companion/CompanionBridgeTest.kt
 ├─ gradle/wrapper/               # Gradle 9.6.0 wrapper
 ├─ docs/                         # 需求、技术方案、测试记录、答辩材料
 ├─ README.md
@@ -106,9 +108,11 @@ course-design/
 命令行构建与测试：
 
 ```bash
-./gradlew :app:assembleDebug      # 产物 app/build/outputs/apk/debug/app-debug.apk
-./gradlew :app:testDebugUnitTest  # 纯 JVM 单元测试（28 个用例：SRS 11 + 统计 11 + 测试模式 6）
-./gradlew :app:installDebug       # 连接设备后直接安装
+./gradlew :app:assembleDebug        # 产物 app/build/outputs/apk/debug/app-debug.apk
+./gradlew :app:testDebugUnitTest    # 纯 JVM 单元测试（28 个：SRS 11 + 统计 11 + 测试模式 6）
+./gradlew :companion:testDebugUnitTest  # 伴生模块契约测试（5 个）
+./gradlew test                      # 两个模块一起跑，共 33 个用例
+./gradlew :app:installDebug         # 连接设备后直接安装
 ```
 
 用 Android Studio 打开根目录即可，首次同步需联网下载 AGP 与 androidx 依赖；
@@ -134,6 +138,12 @@ course-design/
 > 改为 `androidx.appcompat.R.attr.colorPrimary`。另外 `scaledDensity` 已废弃，
 > 字号换算统一走 `TypedValue.applyDimension(COMPLEX_UNIT_SP, ...)`。
 
+> **踩坑记录 5**：录屏水印没有塞进页面布局，而是挂到 `android.R.id.content` 这个 FrameLayout 上
+> （`ui/common/DebugWatermark.kt`）：它不参与任何界面的 measure/布局，不会把按钮挤动，切 Fragment 也不会丢；
+> `BuildConfig.DEBUG` 为假时直接 return，release 包没有残留。
+> 另外验证时踩了个低级坑：日志 tag 是 `debug-watermark`（小写），拿 `DebugWatermark` 去 grep logcat 会一无所获——
+> **先确认 tag 的字面量，再怀疑代码没执行**。
+
 ## 当前进度
 
 | 课次 | 里程碑 | 状态 |
@@ -144,7 +154,8 @@ course-design/
 | 4 | 数据持久化（Room） | ✅ 3 次提交：实体/DAO/数据库 → 仓库层与种子数据 → 三级界面打通 |
 | 5 | 自定义算法（SRS）+ 复习主流程 + 通知 | ✅ 4 次提交：调度算法与单测 → 复习页接入 → 按钮遮挡修复 → WorkManager 提醒 |
 | 6 | 测试模式（选择/拼写）+ 统计页 | ✅ 2 次提交：统计页（今日进度/连续打卡/柱状图）→ 测试模式（选择 + 拼写） |
-| 7–10 | 权限降级打磨、伴生模块、录制与答辩 | ⏳ 待做 |
+| 7 | 伴生模块骨架 + 权限降级打磨 | ✅ 2 次提交：伴生模块只读桥与通知设置引导 → debug 水印与文档 |
+| 8–10 | 词库导入、录制与答辩 | ⏳ 待做 |
 
 提交节奏：按里程碑逐次提交（功能拆成「数据层 → 逻辑层 → UI 联调」多次），全周期需 **≥15 次有意义的提交**。
 
