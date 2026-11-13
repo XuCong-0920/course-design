@@ -9,9 +9,23 @@
 
     <string name="deck_list_title">我的词库</string>
     <string name="deck_list_subtitle">点击词库查看单词列表</string>
-    <string name="deck_list_empty">还没有词库，稍等片刻或从「我的」导入</string>
+    <string name="deck_list_empty">还没有词库，点右上角「导入词库」从 CSV / JSON 文件生成一个</string>
     <string name="deck_word_count">%1$d 个单词</string>
     <string name="deck_due_count">今日待复习 %1$d 个</string>
+    <string name="deck_import_button">导入词库</string>
+
+    <string name="import_choose_title">从哪种文件导入</string>
+    <string name="import_format_csv">CSV：单词,音标,释义,例句</string>
+    <string name="import_format_json">JSON：含 words 数组的文件</string>
+    <string name="import_summary_title">解析结果</string>
+    <string name="import_summary_body">词库名「%1$s」\n可用 %2$d 个词\n跳过 %3$d 行\n文件内重复 %4$d 个</string>
+    <string name="import_problem_line">第 %1$d 行：%2$s</string>
+    <string name="import_problems_more">……还有 %1$d 行问题，导入后可以再补</string>
+    <string name="import_confirm">导入</string>
+    <string name="import_cancel">取消</string>
+    <string name="import_done">已导入 %1$d 个词，跳过 %2$d 个重复</string>
+    <string name="import_empty">这个文件里没有可用的单词，检查一下列的顺序和表头</string>
+    <string name="import_failed">读不出这个文件：%1$s</string>
 
     <string name="word_list_empty">这个词库还没有单词</string>
     <string name="word_detail_title">单词详情</string>
@@ -82,7 +96,7 @@
     <string name="mine_permission_missing">还没授予通知权限：到点不会弹出提醒。复习、测试、统计等所有功能照常可用。</string>
     <string name="mine_open_settings">去系统设置里开启通知</string>
     <string name="mine_section_more">关于</string>
-    <string name="mine_more_hint">词库导入（CSV/JSON）将在下一次课接入；已有两套内置示例词库。</string>
+    <string name="mine_more_hint">词库导入（CSV / JSON）在「词库」页右上角；内置两套示例词库。</string>
     <string name="mine_companion_status">伴生模块 %1$s 已连接：主 App 共 %2$d 个词，当前 %3$d 个待复习</string>
     <string name="mine_companion_unbound">伴生模块 %1$s 未连接</string>
     <string name="mine_version">单词记忆 B4 · 课程设计 v0.7</string>
