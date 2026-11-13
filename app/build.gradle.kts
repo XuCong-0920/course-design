@@ -13,6 +13,8 @@ android {
         targetSdk = 37
         versionCode = 1
         versionName = "0.1.0"
+        // 仪器化测试：把「解析 → 事务写入 Room」这条链路在真机上跑一遍
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
@@ -52,4 +54,9 @@ dependencies {
 
     // 纯 JVM 单元测试（SRS 调度算法等，不需要设备/模拟器）
     testImplementation("junit:junit:4.13.2")
+
+    // 仪器化测试（真机/模拟器上跑 Room 真实写入）
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test:core-ktx:1.7.0")
 }
