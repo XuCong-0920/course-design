@@ -62,10 +62,12 @@ course-design/
 │     │  │  ├─ srs/SrsScheduler.kt         # 简化 SM-2 调度算法
 │     │  │  ├─ stats/StatsCalculator.kt    # 今日进度 / 连续打卡 / 近 7 天柱状图统计
 │     │  │  ├─ quiz/QuizBuilder.kt         # 测试模式出题 + 拼写判定
-│     │  │  └─ importer/WordFileImporter.kt # 词库文件解析（CSV / JSON，坏行只跳过不整份失败）
+│     │  │  ├─ importer/WordFileImporter.kt # 词库文件解析（CSV / JSON，坏行只跳过不整份失败）
+│     │  │  └─ dict/                       # 有道词典响应解析（Gson）+ 每日例句挑选（纯函数）
+│     │  ├─ data/remote/                  # 在线词典：OkHttp 取数、Gson 缓存、缓存优先的仓库
 │     │  ├─ notification/                 # WorkManager 每日提醒 + 通知三操作 + 权限降级
 │     │  └─ ui/
-│     │     ├─ common/                    # BasePlaceholderFragment、DebugWatermark（debug 学号水印）、DocumentTextReader
+│     │     ├─ common/                    # BasePlaceholderFragment、DebugWatermark（debug 学号水印）、DocumentTextReader、PronunciationPlayer
 │     │     ├─ deck/                      # 词库列表：Fragment + ViewModel + Adapter
 │     │     ├─ word/                      # 单词列表 / 单词详情（列表 → 详情，含测试入口）
 │     │     ├─ review/                    # 复习：ViewModel 持有到期队列 + 三档反馈
@@ -78,7 +80,7 @@ course-design/
 │        ├─ navigation/nav_main.xml       # startDestination = deckListFragment
 │        ├─ menu/menu_bottom_nav.xml      # 底部导航，item id 与目的地 id 一致
 │        └─ values/strings.xml、themes.xml
-│  └─ src/test/、src/androidTest/          # 纯 JVM 单测（40 个）+ 真机仪器化测试（3 个）
+│  └─ src/test/、src/androidTest/          # 纯 JVM 单测（61 个）+ 真机仪器化测试（6 个）
 ├─ companion/                    # 伴生模块（1 学分，Android Library）
 │  ├─ README.md                  # 模块职责、依赖方向、接口契约
 │  ├─ src/main/java/com/xucong/wordmemory/companion/CompanionBridge.kt
@@ -105,17 +107,19 @@ course-design/
 | Room | 2.8.5（`room-runtime` / `room-ktx` + KSP 编译器） |
 | KSP | 2.2.10-2.0.2 |
 | WorkManager | 2.12.0（每日提醒周期任务 + 延迟重发） |
+| OkHttp | 5.5.1（在线词典 / 音频直链） |
+| Gson | 2.15.0（词典 JSON 解析与缓存序列化） |
 | JUnit | 4.13.2（纯 JVM 单元测试，不需要设备） |
 
 命令行构建与测试：
 
 ```bash
 ./gradlew :app:assembleDebug        # 产物 app/build/outputs/apk/debug/app-debug.apk
-./gradlew :app:testDebugUnitTest    # 纯 JVM 单元测试（40 个：SRS 11 + 统计 11 + 测试模式 6 + 导入解析 12）
+./gradlew :app:testDebugUnitTest    # 纯 JVM 单元测试（61 个：SRS 11 + 统计 11 + 测试模式 6 + 导入 12 + 在线词典 21）
 ./gradlew :companion:testDebugUnitTest  # 伴生模块契约测试（5 个）
-./gradlew test                      # 两个模块一起跑，共 45 个用例
+./gradlew test                      # 两个模块一起跑，共 66 个用例
 ./gradlew :app:installDebug         # 连接设备后直接安装
-./gradlew :app:connectedDebugAndroidTest  # 真机/模拟器上的仪器化测试（导入 → Room 真实写入，3 个）
+./gradlew :app:connectedDebugAndroidTest  # 真机/模拟器上的仪器化测试（导入写入 3 个 + 联网 3 个）
 ```
 
 用 Android Studio 打开根目录即可，首次同步需联网下载 AGP 与 androidx 依赖；
@@ -154,6 +158,12 @@ course-design/
 > 结论比截图更硬。`connectedDebugAndroidTest` 在本机模拟器上会因设备名含 ` - ` 生成空报告（`tests=0`、exit 1），
 > 用 `adb shell am instrument -w -e class ...` 直接跑可以看到真实的 `OK (3 tests)`。
 
+> **踩坑记录 7**：Gson 的 `JsonObject.getAsJsonObject(key)` 只在字段**确实是对象**时才有值。
+> 道词典里 `ec.word[0].trs[].tr[].l.i` 是**数组**，`usphone` / `sentence` 是**字符串**，
+> 一开始我统一用「取对象」的写法，结果全部静默取到 null，7 个用例变红却不报错——
+> 表现为「解析出空内容」而不是抛异常。改用 `get(key)` 取原始 `JsonElement` 再按类型分支后通过。
+> 教训：**解析第三方 JSON 时，先确认每个字段的真实类型，再决定取值函数**。
+
 ## 当前进度
 
 | 课次 | 里程碑 | 状态 |
@@ -166,7 +176,8 @@ course-design/
 | 6 | 测试模式（选择/拼写）+ 统计页 | ✅ 2 次提交：统计页（今日进度/连续打卡/柱状图）→ 测试模式（选择 + 拼写） |
 | 7 | 伴生模块骨架 + 权限降级打磨 | ✅ 2 次提交：伴生模块只读桥与通知设置引导 → debug 水印与文档 |
 | 8 | 词库导入（CSV / JSON） | ✅ 3 次提交：解析层与事务写入 → 词库页接入 SAF 选文件 → 仪器化测试与文档 |
-| 9–10 | 录制与答辩 | ⏳ 待做 |
+| 9 | 联网能力（在线例句 / 发音） | ✅ 4 次提交：在线词典数据层 → 详情页联网补充 → 每日例句 → 真机联网用例 |
+| 10 | 录制与答辩 | ⏳ 待做 |
 
 提交节奏：按里程碑逐次提交（功能拆成「数据层 → 逻辑层 → UI 联调」多次），全周期需 **≥15 次有意义的提交**。
 
