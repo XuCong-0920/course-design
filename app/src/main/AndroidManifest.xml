@@ -4,6 +4,9 @@
     <!-- Android 13+ 发通知需要运行时授权，见 MainActivity 里的申请逻辑与「我的」页降级提示 -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!-- 在线词典（音标 / 双语例句）与单词发音音频都走 HTTPS -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".WordMemoryApp"
         android:allowBackup="true"

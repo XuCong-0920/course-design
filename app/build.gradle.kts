@@ -52,8 +52,14 @@ dependencies {
     // WorkManager：每日复习提醒（周期任务 + 一次性延迟重发）
     implementation("androidx.work:work-runtime-ktx:2.12.0")
 
+    // 联网：OkHttp 负责请求，Gson 负责解析词典 JSON（都用成熟库，不手搓）
+    implementation("com.squareup.okhttp3:okhttp:5.5.1")
+    implementation("com.google.code.gson:gson:2.15.0")
+
     // 纯 JVM 单元测试（SRS 调度算法等，不需要设备/模拟器）
     testImplementation("junit:junit:4.13.2")
+    // 单测里用 runBlocking 测挂起函数（lookup 是 suspend）
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
     // 仪器化测试（真机/模拟器上跑 Room 真实写入）
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
