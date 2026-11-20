@@ -72,6 +72,9 @@ class PrefsDictCache(
         prefs.edit().clear().apply()
     }
 
+    /** 已缓存的词条数量，仅用于「我的」页展示，不参与任何逻辑判断。 */
+    fun size(): Int = prefs.all.size
+
     private data class CachedEntry(
         val term: String = "",
         val us: String = "",

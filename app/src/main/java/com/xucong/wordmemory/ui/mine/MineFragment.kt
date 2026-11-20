@@ -6,11 +6,13 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.xucong.wordmemory.R
 import com.xucong.wordmemory.companion.CompanionBridge
+import com.xucong.wordmemory.data.remote.PrefsDictCache
 import com.xucong.wordmemory.databinding.FragmentMineBinding
 import com.xucong.wordmemory.notification.ReminderNotifications
 import com.xucong.wordmemory.notification.ReminderPrefs
@@ -27,6 +29,9 @@ class MineFragment : Fragment(R.layout.fragment_mine) {
 
     private var _binding: FragmentMineBinding? = null
     private val binding get() = requireNotNull(_binding)
+
+    /** 「清空在线词典缓存」用的缓存实例；在 onViewCreated 里按 Context 建。 */
+    private lateinit var cache: PrefsDictCache
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,6 +55,13 @@ class MineFragment : Fragment(R.layout.fragment_mine) {
         }
 
         binding.openNotificationSettings.setOnClickListener { openNotificationSettings() }
+
+        cache = PrefsDictCache(context)
+        binding.clearCacheButton.setOnClickListener {
+            cache.clear()
+            refreshCacheInfo()
+            Toast.makeText(context, R.string.mine_cache_cleared, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onResume() {
@@ -59,6 +71,11 @@ class MineFragment : Fragment(R.layout.fragment_mine) {
         binding.permissionHint.isVisible = !canPost
         binding.openNotificationSettings.isVisible = !canPost
         refreshCompanionStatus()
+        refreshCacheInfo()
+    }
+
+    private fun refreshCacheInfo() {
+        binding.cacheInfoText.text = getString(R.string.mine_cache_info, cache.size())
     }
 
     /**

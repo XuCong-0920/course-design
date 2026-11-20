@@ -54,6 +54,12 @@
     <string name="daily_source_local">例句来自本机词库</string>
     <string name="daily_source_offline">当前离线，先显示本机例句；联网后会自动换成在线例句</string>
 
+    <!-- 我的页：在线词典缓存 -->
+    <string name="mine_section_network">在线词典缓存</string>
+    <string name="mine_cache_info">已缓存 %1$d 个词 · 有效期 7 天，只用于离线复看</string>
+    <string name="mine_clear_cache">清空在线词典缓存</string>
+    <string name="mine_cache_cleared">缓存已清空，下次查词会重新联网</string>
+
     <string name="review_title">复习</string>
     <string name="review_placeholder">骨架占位：艾宾浩斯调度（SrsScheduler）与答题卡将在下一次课接入。</string>
     <string name="review_remaining">还剩 %1$d 个</string>
