@@ -1,6 +1,15 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("com.google.devtools.ksp")
+}
+
+// release 签名：keystore.properties 不进仓库（.gitignore 已排除），没有这份文件时
+// release 包按未签名构建，方便同学 clone 下来直接编译。
+val keystorePropsFile = rootProject.file("keystore.properties")
+val keystoreProps = Properties().apply {
+    if (keystorePropsFile.exists()) keystorePropsFile.inputStream().use { load(it) }
 }
 
 android {
@@ -11,10 +20,30 @@ android {
         applicationId = "com.xucong.wordmemory"
         minSdk = 24
         targetSdk = 37
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "1.0.0"
         // 仪器化测试：把「解析 → 事务写入 Room」这条链路在真机上跑一遍
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        if (keystorePropsFile.exists()) {
+            create("release") {
+                storeFile = file(keystoreProps.getProperty("storeFile"))
+                storePassword = keystoreProps.getProperty("storePassword")
+                keyAlias = keystoreProps.getProperty("keyAlias")
+                keyPassword = keystoreProps.getProperty("keyPassword")
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            if (keystorePropsFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+        }
     }
 
     compileOptions {
