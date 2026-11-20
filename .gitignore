@@ -20,6 +20,9 @@ build/
 /app/build/
 /companion/build/
 
+# 但结课交付的签名 release 包要进仓库（发布与版本记录）
+!docs/release/*.apk
+
 # ---- 签名与密钥（绝不入库）----
 *.jks
 *.keystore
