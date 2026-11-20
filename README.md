@@ -80,10 +80,12 @@ course-design/
 │        ├─ navigation/nav_main.xml       # startDestination = deckListFragment
 │        ├─ menu/menu_bottom_nav.xml      # 底部导航，item id 与目的地 id 一致
 │        └─ values/strings.xml、themes.xml
-│  └─ src/test/、src/androidTest/          # 纯 JVM 单测（61 个）+ 真机仪器化测试（6 个）
+│  └─ src/test/、src/androidTest/          # 纯 JVM 单测（61 个）+ 真机仪器化测试（9 个）
 ├─ companion/                    # 伴生模块（1 学分，Android Library）
 │  ├─ README.md                  # 模块职责、依赖方向、接口契约
 │  ├─ src/main/java/com/xucong/wordmemory/companion/CompanionBridge.kt
+│  ├─ src/main/java/com/xucong/wordmemory/companion/widget/ReviewWidgetProvider.kt  # 桌面小组件（独立入口）
+│  ├─ src/main/res/layout/widget_review.xml 等                                       # 小组件布局/背景/配置
 │  └─ src/test/java/com/xucong/wordmemory/companion/CompanionBridgeTest.kt
 ├─ gradle/wrapper/               # Gradle 9.6.0 wrapper
 ├─ docs/                         # 需求、技术方案、测试记录、答辩材料
@@ -119,7 +121,7 @@ course-design/
 ./gradlew :companion:testDebugUnitTest  # 伴生模块契约测试（5 个）
 ./gradlew test                      # 两个模块一起跑，共 66 个用例
 ./gradlew :app:installDebug         # 连接设备后直接安装
-./gradlew :app:connectedDebugAndroidTest  # 真机/模拟器上的仪器化测试（导入写入 3 个 + 联网 3 个）
+./gradlew :app:connectedDebugAndroidTest  # 真机仪器化测试（导入写入 3 + 联网 3 + 小组件读数 3）
 ```
 
 用 Android Studio 打开根目录即可，首次同步需联网下载 AGP 与 androidx 依赖；
@@ -177,9 +179,16 @@ course-design/
 | 7 | 伴生模块骨架 + 权限降级打磨 | ✅ 2 次提交：伴生模块只读桥与通知设置引导 → debug 水印与文档 |
 | 8 | 词库导入（CSV / JSON） | ✅ 3 次提交：解析层与事务写入 → 词库页接入 SAF 选文件 → 仪器化测试与文档 |
 | 9 | 联网能力（在线例句 / 发音） | ✅ 4 次提交：在线词典数据层 → 详情页联网补充 → 每日例句 → 真机联网用例 |
-| 10 | 录制与答辩 | ⏳ 待做 |
+| 10 | 结课收尾：伴生模块独立入口（桌面小组件）+ 产品化（版本记录、签名 release） | ✅ 3 次提交：小组件与只读统计出口 → 版本号/CHANGELOG/release 包 → 文档同步 |
+| 11 | 录屏与答辩 | ⏳ 待做（两段录屏：主 App + 桌面小组件） |
 
-提交节奏：按里程碑逐次提交（功能拆成「数据层 → 逻辑层 → UI 联调」多次），全周期需 **≥15 次有意义的提交**。
+提交节奏：按里程碑逐次提交（功能拆成「数据层 → 逻辑层 → UI 联调」多次），全周期需 **≥15 次有意义的提交**；当前 **38 次**，版本演进见 `CHANGELOG.md`。
+
+## 发布与版本
+
+- 版本号：`1.0.0`（versionCode 2），演进记录见 `CHANGELOG.md`。
+- 结课签名包：`docs/release/wordmemory-b4-v1.0.0.apk`（V2 签名，证书 `CN=Xu Cong`）。
+- 自己出包：仓库根放 `keystore.properties`（已在 `.gitignore` 中）即自动签名，缺省则按未签名构建。
 
 ## 提交规范
 
