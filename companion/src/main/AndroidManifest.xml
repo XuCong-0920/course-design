@@ -1,2 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <!-- 伴生模块的独立入口：桌面小组件。它自己就能显示今日待复习，并跳转主 App 复习页 -->
+        <receiver
+            android:name=".widget.ReviewWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.xucong.wordmemory.companion.action.REFRESH_WIDGET" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/review_widget_info" />
+        </receiver>
+    </application>
+</manifest>

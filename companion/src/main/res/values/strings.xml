@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_title">今日待复习</string>
+    <string name="widget_due_value">%1$d 个单词</string>
+    <string name="widget_total_value">词库共 %1$d 个词</string>
+    <string name="widget_loading">读取中…</string>
+    <string name="widget_unavailable">暂时读不到主 App 的数据</string>
+    <string name="widget_open_review">去复习</string>
+    <string name="widget_refresh">刷新</string>
+    <string name="widget_description">在桌面显示今天的待复习词数，点一下直接进复习页</string>
+</resources>

@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.xucong.wordmemory.databinding.ActivityMainBinding
+import com.xucong.wordmemory.companion.widget.ReviewWidgetProvider
 import com.xucong.wordmemory.notification.ReminderNotifications
 import com.xucong.wordmemory.notification.ReminderScheduler
 import com.xucong.wordmemory.ui.common.DebugWatermark
@@ -54,6 +55,13 @@ class MainActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         applyReminder(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 伴生模块的桌面小组件显示的是「今日待复习」，回到主 App 时顺手刷新一次，
+        // 这样用户刚复习完切到桌面，小组件数字是新的。
+        ReviewWidgetProvider.refresh(this)
     }
 
     /** 从通知点进来时直接落在复习页，省掉「首页 → 复习」这一步。 */
